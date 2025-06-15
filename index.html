@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northland Analytics - Org Structure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        
+        .logo h2 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 1.8em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .nav-btn:hover:not(.active) {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .hero-section {
+            height: 80vh;
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="warehouse" patternUnits="userSpaceOnUse" width="200" height="200"><rect width="200" height="200" fill="%23f0f0f0" opacity="0.1"/><rect x="20" y="60" width="160" height="80" fill="%23667eea" opacity="0.3"/><rect x="30" y="70" width="20" height="20" fill="%23764ba2" opacity="0.4"/><rect x="60" y="70" width="20" height="20" fill="%23764ba2" opacity="0.4"/><rect x="90" y="70" width="20" height="20" fill="%23764ba2" opacity="0.4"/><rect x="120" y="70" width="20" height="20" fill="%23764ba2" opacity="0.4"/><rect x="150" y="70" width="20" height="20" fill="%23764ba2" opacity="0.4"/></pattern></defs><rect width="100%25" height="100%25" fill="url(%23warehouse)"/></svg>'),
+                linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: 400px 400px, cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-overlay {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            font-size: 4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4em;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .cta-button {
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
+        }
+        
+        .services-section {
+            padding: 80px 20px;
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .services-title {
+            text-align: center;
+            font-size: 3em;
+            color: #2c3e50;
+            margin-bottom: 60px;
+            font-weight: 700;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 5px solid #667eea;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .service-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+        
+        .phase-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+        
+        .phase-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .phase-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .phase-btn:not(.active) {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #e9ecef;
+        }
+        
+        .phase-btn:hover:not(.active) {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+        
+        .org-chart {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .org-chart.active {
+            display: block;
+        }
+        
+        .level {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .role-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+            min-width: 280px;
+            max-width: 320px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .role-card.founder {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+        
+        .role-card.tech {
+            border-left-color: #3498db;
+        }
+        
+        .role-card.business {
+            border-left-color: #2ecc71;
+        }
+        
+        .role-card.operations {
+            border-left-color: #f39c12;
+        }
+        
+        .role-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .role-subtitle {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .role-responsibilities {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+        
+        .role-responsibilities li {
+            color: #5a6c7d;
+            margin-bottom: 5px;
+            padding-left: 15px;
+            position: relative;
+            font-size: 0.9em;
+        }
+        
+        .role-responsibilities li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .hire-timing {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            color: #6c757d;
+            text-align: center;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .connections {
+            display: flex;
+            justify-content: center;
+            margin: -20px 0;
+        }
+        
+        .connection-line {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, #667eea, transparent);
+        }
+        
+        .phase-description {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .key-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .metric-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+        
+        .metric-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>🏢 Northland Analytics</h2>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="showSection('home')">Home</button>
+                <button class="nav-btn" onclick="showSection('org-structure')">Org Structure</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Page Section -->
+    <div id="home" class="section active">
+        <div class="hero-section">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <h1 class="hero-title">The Amazon of Warehouses</h1>
+                    <p class="hero-subtitle">Connecting idle warehouse space with businesses across West Africa through our digital marketplace platform</p>
+                    <button class="cta-button" onclick="alert('Platform launching soon! Contact us to join the waitlist.')">
+                        🚀 Launch Your Warehouse Business
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="services-section">
+            <div class="container">
+                <h2 class="services-title">Our Services</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">🏭</div>
+                        <h3>Warehouse Listing</h3>
+                        <p>List your idle warehouse space and start earning revenue from unused storage areas across Ghana and West Africa.</p>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">📦</div>
+                        <h3>On-Demand Storage</h3>
+                        <p>Find and book secure warehouse space instantly for your goods, inventory, or raw materials with flexible terms.</p>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">📊</div>
+                        <h3>Analytics Dashboard</h3>
+                        <p>Monitor your warehouse performance, track bookings, manage disputes, and access marketplace insights.</p>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">🤝</div>
+                        <h3>Partnership Network</h3>
+                        <p>Connect with SMEs, importers, farmers, eCommerce sellers, and government institutions across the region.</p>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">🔒</div>
+                        <h3>Security & Insurance</h3>
+                        <p>Comprehensive security protocols and insurance coverage to protect your stored goods and warehouse assets.</p>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">📱</div>
+                        <h3>Mobile Platform</h3>
+                        <p>Manage your warehouse business on-the-go with our intuitive mobile app for iOS and Android.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Org Structure Section -->
+    <div id="org-structure" class="section">
+        <div class="container">
+            <div class="header">
+                <h1>🏢 Northland Analytics</h1>
+                <p>Organizational Structure & Growth Roadmap</p>
+            </div>
+        
+        <div class="phase-toggle">
+            <button class="phase-btn active" onclick="showPhase('phase1')">Phase 1: Foundation (0-6 months)</button>
+            <button class="phase-btn" onclick="showPhase('phase2')">Phase 2: MVP Launch (6-12 months)</button>
+            <button class="phase-btn" onclick="showPhase('phase3')">Phase 3: Scale (12-24 months)</button>
+        </div>
+        
+        <!-- Phase 1: Foundation -->
+        <div id="phase1" class="org-chart active">
+            <div class="phase-description">
+                <h3>🚀 Phase 1: Foundation (0-6 months)</h3>
+                <p>Focus: Build core team, develop MVP, validate market fit in Ghana</p>
+            </div>
+            
+            <div class="level">
+                <div class="role-card founder">
+                    <div class="role-title">CEO/Founder</div>
+                    <div class="role-subtitle">Visionary & Strategic Leader</div>
+                    <ul class="role-responsibilities">
+                        <li>Overall strategy & vision</li>
+                        <li>Fundraising & investor relations</li>
+                        <li>Market validation in Ghana</li>
+                        <li>Key partnerships with warehouses</li>
+                        <li>Team building & culture</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="connections">
+                <div class="connection-line"></div>
+            </div>
+            
+            <div class="level">
+                <div class="role-card tech">
+                    <div class="role-title">CTO/Co-founder</div>
+                    <div class="role-subtitle">Technical Architecture</div>
+                    <ul class="role-responsibilities">
+                        <li>Platform architecture & development</li>
+                        <li>MVP build (web + mobile)</li>
+                        <li>Database design</li>
+                        <li>Security & payment systems</li>
+                        <li>Technical team hiring</li>
+                    </ul>
+                </div>
+                
+                <div class="role-card business">
+                    <div class="role-title">Head of Business Development</div>
+                    <div class="role-subtitle">Market Entry Specialist</div>
+                    <ul class="role-responsibilities">
+                        <li>Warehouse owner acquisition</li>
+                        <li>SME customer development</li>
+                        <li>Local market research</li>
+                        <li>Partnership negotiations</li>
+                        <li>Go-to-market strategy</li>
+                    </ul>
+                    <div class="hire-timing">Hire Month 2-3</div>
+                </div>
+            </div>
+            
+            <div class="connections">
+                <div class="connection-line"></div>
+            </div>
+            
+            <div class="level">
+                <div class="role-card tech">
+                    <div class="role-title">Full-Stack Developer</div>
+                    <div class="role-subtitle">MVP Development</div>
+                    <ul class="role-responsibilities">
+                        <li>Frontend development (React/Vue)</li>
+                        <li>Backend APIs (Node.js/Python)</li>
+                        <li>Mobile app development</li>
+                        <li>Integration testing</li>
+                    </ul>
+                    <div class="hire-timing">Hire Month 1-2</div>
+                </div>
+                
+                <div class="role-card operations">
+                    <div class="role-title">Operations Manager</div>
+                    <div class="role-subtitle">Ghana Market Focus</div>
+                    <ul class="role-responsibilities">
+                        <li>Warehouse onboarding process</li>
+                        <li>Quality standards development</li>
+                        <li>Customer support setup</li>
+                        <li>Local compliance & regulations</li>
+                    </ul>
+                    <div class="hire-timing">Hire Month 3-4</div>
+                </div>
+            </div>
+            
+            <div class="key-metrics">
+                <div class="metric-card">
+                    <div class="metric-number">5-7</div>
+                    <div class="metric-label">Core Team Size</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$50K-100K</div>
+                    <div class="metric-label">Monthly Burn Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">6 months</div>
+                    <div class="metric-label">MVP Timeline</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">Accra + Tema</div>
+                    <div class="metric-label">Initial Markets</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Phase 2: MVP Launch -->
+        <div id="phase2" class="org-chart">
+            <div class="phase-description">
+                <h3>🎯 Phase 2: MVP Launch (6-12 months)</h3>
+                <p>Focus: Launch platform, acquire first customers, expand within Ghana</p>
+            </div>
+            
+            <div class="level">
+                <div class="role-card founder">
+                    <div class="role-title">CEO</div>
+                    <ul class="role-responsibilities">
+                        <li>Scale strategy & expansion planning</li>
+                        <li>Series A preparation</li>
+                        <li>Government & enterprise sales</li>
+                    </ul>
+                </div>
+                
+                <div class="role-card tech">
+                    <div class="role-title">CTO</div>
+                    <ul class="role-responsibilities">
+                        <li>Platform scaling & optimization</li>
+                        <li>Data analytics implementation</li>
+                        <li>Security & compliance</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="level">
+                <div class="role-card tech">
+                    <div class="role-title">Backend Developer</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card tech">
+                    <div class="role-title">Frontend Developer</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card business">
+                    <div class="role-title">Sales Manager</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card business">
+                    <div class="role-title">Marketing Manager</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+            </div>
+            
+            <div class="level">
+                <div class="role-card operations">
+                    <div class="role-title">Customer Success Manager</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card operations">
+                    <div class="role-title">Data Analyst</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card operations">
+                    <div class="role-title">Quality Assurance Lead</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+            </div>
+            
+            <div class="key-metrics">
+                <div class="metric-card">
+                    <div class="metric-number">12-15</div>
+                    <div class="metric-label">Team Size</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$150K-250K</div>
+                    <div class="metric-label">Monthly Burn Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">50+</div>
+                    <div class="metric-label">Warehouse Partners</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">All Ghana</div>
+                    <div class="metric-label">Market Coverage</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Phase 3: Scale -->
+        <div id="phase3" class="org-chart">
+            <div class="phase-description">
+                <h3>🌍 Phase 3: Regional Scale (12-24 months)</h3>
+                <p>Focus: Expand to Nigeria, Ivory Coast, Senegal - become West Africa's warehouse marketplace</p>
+            </div>
+            
+            <div class="level">
+                <div class="role-card founder">
+                    <div class="role-title">CEO</div>
+                </div>
+                
+                <div class="role-card tech">
+                    <div class="role-title">CTO</div>
+                </div>
+                
+                <div class="role-card business">
+                    <div class="role-title">COO</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card business">
+                    <div class="role-title">VP Sales</div>
+                    <div class="hire-timing">Promote/Hire</div>
+                </div>
+            </div>
+            
+            <div class="level">
+                <div class="role-card operations">
+                    <div class="role-title">Country Manager - Nigeria</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card operations">
+                    <div class="role-title">Country Manager - Ivory Coast</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card tech">
+                    <div class="role-title">Head of Product</div>
+                    <div class="hire-timing">New Hire</div>
+                </div>
+                
+                <div class="role-card business">
+                    <div class="role-title">Head of Marketing</div>
+                    <div class="hire-timing">Promote</div>
+                </div>
+            </div>
+            
+            <div class="level">
+                <div class="role-card tech">
+                    <div class="role-title">DevOps Engineer</div>
+                </div>
+                
+                <div class="role-card tech">
+                    <div class="role-title">Mobile Developer</div>
+                </div>
+                
+                <div class="role-card operations">
+                    <div class="role-title">Finance Manager</div>
+                </div>
+                
+                <div class="role-card operations">
+                    <div class="role-title">Legal/Compliance</div>
+                </div>
+            </div>
+            
+            <div class="key-metrics">
+                <div class="metric-card">
+                    <div class="metric-number">25-35</div>
+                    <div class="metric-label">Team Size</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$400K-600K</div>
+                    <div class="metric-label">Monthly Burn Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">4 Countries</div>
+                    <div class="metric-label">Market Coverage</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">500+</div>
+                    <div class="metric-label">Warehouse Partners</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        function showPhase(phaseId) {
+            // Hide all phases
+            document.querySelectorAll('.org-chart').forEach(chart => {
+                chart.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.phase-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected phase
+            document.getElementById(phaseId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
