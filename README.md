@@ -31,4 +31,3 @@ Next Steps:
 3. Upload both files** (`index.html` and `README.md`) to your GitHub repo
 4. Enable GitHub Pages** to make it live
 
-This README positions Northland Analytics & Logistic as a serious Startup Company with a clear vision, making it easier to attract talent, partners, and investors.
