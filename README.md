@@ -1,7 +1,6 @@
 Warehouse-marketplace
 Digital warehouse marketplace platform for West Africa
 
-I've created a comprehensive README that positions Northland Analytics professionally.Here's what it includes:
 
 🎯 Key Sections:
 - Problem/Solution**: Clear value proposition
